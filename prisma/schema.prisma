@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Agents {
+  id            Int    @id @default(autoincrement())
+  full_name     String
+  username      String @unique
+  phone_number  String
+  email         String @unique
+  password      String
+  refresh_token String
+  uniqueid      String @unique
+
+  accommodation Accommodation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("agents")
+}
+
+model Customers {
+  id           Int    @id @default(autoincrement())
+  full_name    String
+  phone_number String
+  email        String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("customers")
+}
+
+model Build_with {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  accommodation Accommodation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("build_with")
+}
+
+model Rent_or_buy {
+  id   Int    @id @default(autoincrement())
+  type String
+
+  accommodation Accommodation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("rent_or_buy")
+}
+
+model Home_type {
+  id   Int    @id @default(autoincrement())
+  type String
+
+  accommodation Accommodation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("home_type")
+}
+
+model Status {
+  id        Int    @id @default(autoincrement())
+  home_type String
+
+  accommodation Accommodation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("status")
+}
+
+model Photos {
+  id              Int    @id @default(autoincrement())
+  photo_link      String
+  accomodation_id Int?   @map("accomodation_id")
+
+  accomodation Accommodation? @relation(fields: [accomodation_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("photos")
+}
+
+model Nearby_comforts {
+  id              Int    @id @default(autoincrement())
+  comfort_name    String
+  accomodation_id Int?   @map("accomodation_id")
+
+  accomodation Accommodation? @relation(fields: [accomodation_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("nearby_comforts")
+}
+
+model Contracts {
+  id               Int  @id @default(autoincrement())
+  customer_id      Int? @map("customer_id")
+  agent_id         Int? @map("agent_id")
+  accommodation_id Int? @map("accommodation_id")
+  price            Int
+
+  date_began  DateTime?
+  ending_date DateTime?
+
+  @@map("contracts")
+}
+
+model Accommodation {
+  id               Int    @id @default(autoincrement())
+  adress           String
+  city             String
+  price            Int
+  bedrooms_number  Int
+  bathrooms_number Int
+  square           Float
+  build_year       Int
+  garage           Int?
+  description      String
+  status_id        Int?   @map("status_id")
+  build_with_id    Int?   @map("buil_with_id")
+  rent_or_buy_id   Int?   @map("rent_or_buy_id")
+  agent_id         Int?   @map("agent_id")
+  home_type_id     Int?   @map("home_type_id")
+
+  status      Status?      @relation(fields: [status_id], references: [id])
+  build_with  Build_with?  @relation(fields: [build_with_id], references: [id])
+  rent_or_buy Rent_or_buy? @relation(fields: [rent_or_buy_id], references: [id])
+  agent       Agents?      @relation(fields: [agent_id], references: [id])
+  home_type   Home_type?   @relation(fields: [home_type_id], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  nearby_comforts Nearby_comforts[]
+  photos          Photos[]
+
+  @@map("accommodation")
+}
