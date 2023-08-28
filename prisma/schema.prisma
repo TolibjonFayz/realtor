@@ -7,15 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Agents {
-  id            Int    @id @default(autoincrement())
-  full_name     String
-  username      String @unique
-  phone_number  String
-  email         String @unique
-  password      String
-  refresh_token String
-  uniqueid      String @unique
+model Agent {
+  id                 Int     @id @default(autoincrement())
+  full_name          String?
+  username           String?  @unique
+  phone_number       String?
+  email              String  @unique
+  hashedPassword     String
+  hashedRefreshToken String?
+  uniqueid           String?
 
   accommodation Accommodation[]
 
@@ -144,7 +144,7 @@ model Accommodation {
   status      Status?      @relation(fields: [status_id], references: [id])
   build_with  Build_with?  @relation(fields: [build_with_id], references: [id])
   rent_or_buy Rent_or_buy? @relation(fields: [rent_or_buy_id], references: [id])
-  agent       Agents?      @relation(fields: [agent_id], references: [id])
+  agent       Agent?       @relation(fields: [agent_id], references: [id])
   home_type   Home_type?   @relation(fields: [home_type_id], references: [id])
 
   createdAt DateTime @default(now())

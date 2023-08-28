@@ -5,8 +5,8 @@ CREATE TABLE "agents" (
     "username" TEXT NOT NULL,
     "phone_number" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "refresh_token" TEXT NOT NULL,
+    "hashedPassword" TEXT NOT NULL,
+    "hashedRefreshToken" TEXT,
     "uniqueid" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE "nearby_comforts" (
 );
 
 -- CreateTable
-CREATE TABLE "Contracts" (
+CREATE TABLE "contracts" (
     "id" SERIAL NOT NULL,
     "customer_id" INTEGER,
     "agent_id" INTEGER,
@@ -98,7 +98,7 @@ CREATE TABLE "Contracts" (
     "date_began" TIMESTAMP(3),
     "ending_date" TIMESTAMP(3),
 
-    CONSTRAINT "Contracts_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "contracts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
